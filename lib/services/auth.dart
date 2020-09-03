@@ -9,6 +9,13 @@ class AuthService {
     return typedUser;
   }
 
+  Stream<UserModel> get user {
+    // return _auth.authStateChanges().map( User => );
+    return _auth
+        .authStateChanges()
+        .map((User user) => _userFromFirebaseUser(user));
+  }
+
   Future signInAnon() async {
     try {
       var result = await _auth.signInAnonymously();
@@ -16,6 +23,15 @@ class AuthService {
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
+      return null;
+    }
+  }
+
+  Future signOut() async {
+    try {
+      return await _auth.signOut();
+    } catch (e) {
+      print('signout error ${e.toString()}');
       return null;
     }
   }
