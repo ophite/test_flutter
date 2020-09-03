@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_first_flutter_1/screens/wrapper.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
 }
