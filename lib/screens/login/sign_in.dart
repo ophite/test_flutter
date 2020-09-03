@@ -23,6 +23,7 @@ class _SignInState extends State<SignIn> {
         child: RaisedButton(
           child: Text('Sign in anon'),
           onPressed: () async {
+            print('start signing in');
             dynamic result = await _auth.signInAnon();
             if (result == null) {
               print('error signing in');
