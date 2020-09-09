@@ -4,7 +4,55 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:my_first_flutter_1/services/auth.dart';
 
-class Map extends StatelessWidget {
+class MapPage extends StatefulWidget {
+  @override
+  _MapPageState2 createState() => _MapPageState2();
+}
+
+class _MapPageState2 extends State<MapPage> {
+  Completer<GoogleMapController> _controller = Completer();
+  final _auth = AuthService();
+
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Colors.brown[50],
+        appBar: AppBar(
+          title: Text('Map'),
+          backgroundColor: Colors.brown[400],
+          elevation: 0.0,
+          actions: <Widget>[
+            FlatButton.icon(
+                onPressed: () async {
+                  await _auth.signOut();
+                },
+                icon: Icon(Icons.person),
+                label: Text('logout'))
+          ],
+        ),
+        body: Map());
+  }
+}
+
+class Map extends StatefulWidget {
+  @override
+  _MapState createState() => _MapState();
+}
+
+class _MapState extends State<Map> {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        GoogleMap(
+          initialCameraPosition:
+              CameraPosition(target: LatLng(12.97, 77.58), zoom: 20.0),
+        ),
+      ],
+    );
+  }
+}
+
+class _MapState3 extends State<Map> {
   Completer<GoogleMapController> _controller = Completer();
   final _auth = AuthService();
 
