@@ -37,6 +37,7 @@ dependencies:
   google_maps_flutter: ^0.5.31
   geoflutterfire: ^2.2.1
   location: ^3.0.2
+  uuid: ^2.2.2
 
 
 dev_dependencies:
