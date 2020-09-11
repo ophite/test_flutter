@@ -24,7 +24,7 @@ class _MapPageState extends State<MapPage> {
                   await _auth.signOut();
                 },
                 icon: Icon(Icons.person),
-                label: Text('logout'))
+                label: Text('logout2'))
           ],
         ),
         body: Map());
