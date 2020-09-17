@@ -32,15 +32,20 @@ dependencies:
   cloud_firestore: ^0.14.0+2
   firebase_core: ^0.5.0
   firebase_database: ^4.0.0
-  provider: ^4.3.2+1
+  provider: ^4.3.2+2
   rxdart: any
+  flutter_map: any
   google_maps_flutter: ^0.5.31
   geoflutterfire: ^2.2.1
   location: ^3.0.2
   uuid: ^2.2.2
   google_maps_webservice: ^0.0.18
-  geolocator: ^6.0.0+4
+  geolocator: ^5.1.0
   http: ^0.12.2
+  geocoder: ^0.2.1
+  get_it: ^5.0.0
+  shared_preferences: ^0.5.10
+  flutter_spinkit: ^4.1.2+1
 
 
 dev_dependencies:
