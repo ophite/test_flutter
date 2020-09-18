@@ -148,9 +148,30 @@ class _MapState extends State<Map> {
                       controller: appState.destinationController,
                       textInputAction: TextInputAction.go,
                       onSubmitted: (value) {
+                        // appState.autoCompleteContainer = false;
+                        // appState.autoCompleteContainer = false;
+                        appState.visibilityAutoComplete(false);
                         appState.sendRequest(value);
+                        // appState.autoCompleteContainer = false;
+                      },
+                      onChanged: (value) {
+                        appState.increment();
+                        // appState.autoCompleteContainer = true;
+                        if (appState.destinationController.text != null) {
+                          appState.autoCompleteContainer = true;
+                        } else {
+                          appState.autoCompleteContainer = false;
+                        }
                       },
                       decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () {
+                            // appState.destinationControler.text="";
+                            appState.clearDestination();
+                            // GoogleMap
+                          },
+                        ),
                         icon: Container(
                           margin: EdgeInsets.only(left: 20, top: 5),
                           width: 10,
