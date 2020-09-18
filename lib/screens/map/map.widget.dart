@@ -60,6 +60,32 @@ class _MapState extends State<Map> {
                   polylines: appState.polyLines,
                 ),
 
+                Visibility(
+                  visible: appState.autoCompleteContainer == true,
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(15, 180, 15, 0),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(3.0),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey,
+                            offset: Offset(1.0, 5.0),
+                            blurRadius: 10,
+                            spreadRadius: 3)
+                      ],
+                    ),
+                    child: FutureBuilder(
+                      future: appState.getCountries(),
+                      initialData: [],
+                      builder: (context, snapshot) {
+                        return createCountriesListView(context, snapshot);
+                      },
+                    ),
+                  ),
+                ),
+
                 Positioned(
                   top: 50.0,
                   right: 15.0,
@@ -177,4 +203,43 @@ class _MapState extends State<Map> {
           icon: BitmapDescriptor.defaultMarker));
     });
   }
+}
+
+Widget createCountriesListView(BuildContext context, AsyncSnapshot snapshot) {
+  var values = snapshot.data;
+  return ListView.builder(
+    shrinkWrap: true,
+    itemCount: values == null ? 0 : values.length,
+    itemBuilder: (BuildContext context, int index) {
+      final appState = Provider.of<AppState>(context);
+
+      return GestureDetector(
+        onTap: () {
+          // setState(() {
+          // selectedCountry = values[index].code;
+          appState.selectedPlace = values[index].description;
+          appState.sendRequest(values[index].description);
+          appState.visibilityAutoComplete(false);
+          // });
+
+          appState.destinationController.text =
+              appState.selectedPlace.toString();
+          appState.sendRequest(appState.toString());
+          //  appState.sendRequest(value);
+          // print(values[index].code);
+          print(appState.selectedPlace);
+        },
+        child: Column(
+          children: <Widget>[
+            new ListTile(
+              title: Text(values[index].description),
+            ),
+            Divider(
+              height: 2.0,
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }

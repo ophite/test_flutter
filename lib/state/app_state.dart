@@ -1,30 +1,85 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'package:my_first_flutter_1/requests/google_maps_requests.dart';
 
 class AppState with ChangeNotifier {
   static LatLng _initialPosition;
   LatLng _lastPosition = _initialPosition;
-  bool locationServiceActive = true;
-  final Set<Marker> _markers = {};
-  final Set<Polyline> _polyLines = {};
-  GoogleMapController _mapController;
-  GoogleMapsServices _googleMapsServices = GoogleMapsServices();
-  TextEditingController locationController = TextEditingController();
-  TextEditingController destinationController = TextEditingController();
   LatLng get initialPosition => _initialPosition;
   LatLng get lastPosition => _lastPosition;
+
+  bool locationServiceActive = true;
+  GoogleMapsServices _googleMapsServices = GoogleMapsServices();
   GoogleMapsServices get googleMapsServices => _googleMapsServices;
-  GoogleMapController get mapController => _mapController;
+  TextEditingController locationController = TextEditingController();
+  TextEditingController destinationController = TextEditingController();
+
+  final Set<Marker> _markers = {};
   Set<Marker> get markers => _markers;
+  final Set<Polyline> _polyLines = {};
   Set<Polyline> get polyLines => _polyLines;
+
+  GoogleMapController _mapController;
+  GoogleMapController get mapController => _mapController;
+
+  //for autocomplete
+  List<SuggestedPlaces> _autoComplete;
+  String selectedPlace = "sm";
+  bool autoCompleteContainer = false;
 
   AppState() {
     _getUserLocation();
     _loadingInitialPosition();
   }
+
+  void increment() async {
+    // _autoComplete +=1;
+    // _autoComplete += "blah " ;
+
+    _autoComplete = await getCountries();
+
+    // debugPrint(_autoComplete.toString());
+
+    notifyListeners();
+  }
+
+  void clearDestination() {
+    _markers.clear();
+    _polyLines.clear();
+    destinationController.clear();
+  }
+
+  void visibilityAutoComplete(bool visibleAutoComplete) {
+    autoCompleteContainer = visibleAutoComplete;
+    notifyListeners();
+  }
+
+  Future<List<SuggestedPlaces>> getCountries() async {
+    // final response = await http .get('https://maps.googleapis.com/maps/api/place/queryautocomplete/json?key=AIzaSyB8jxZ33qr3HXTSKgXqx0mXbzQWzLjnfLU&input=${destinationController.text}');
+    // The location is filter for suggestion is restricted for 50km with center at olongapo city hall as LatLng
+    final response = await http.get(
+        'https://maps.googleapis.com/maps/api/place/queryautocomplete/json?key=${apiKey}&location=14.842299, 120.287810&radius=1000&input=${destinationController.text}');
+
+    if (response.statusCode == 200) {
+      var parsedPlacesList = json.decode(response.body);
+
+      List<SuggestedPlaces> suggestedPlaces = List<SuggestedPlaces>();
+
+      parsedPlacesList["predictions"].forEach((suggestedPlace) {
+        suggestedPlaces.add(SuggestedPlaces.fromJSON(suggestedPlace));
+      });
+
+      return suggestedPlaces;
+    } else {
+      throw Exception('Failed to load');
+    }
+  }
+
 // ! TO GET THE USERS LOCATION
   void _getUserLocation() async {
     print("GET USER METHOD RUNNING =========");
@@ -113,9 +168,9 @@ class AppState with ChangeNotifier {
     double latitude = placemark[0].position.latitude;
     double longitude = placemark[0].position.longitude;
     LatLng destination = LatLng(latitude, longitude);
-    _addMarker(destination, intendedLocation);
     String route = await _googleMapsServices.getRouteCoordinates(
         _initialPosition, destination);
+    _addMarker(destination, intendedLocation);
     createRoute(route);
     notifyListeners();
   }
@@ -140,5 +195,19 @@ class AppState with ChangeNotifier {
         notifyListeners();
       }
     });
+  }
+}
+
+class SuggestedPlaces {
+  String description;
+
+  SuggestedPlaces({
+    this.description,
+  });
+
+  factory SuggestedPlaces.fromJSON(Map<String, dynamic> json) {
+    return SuggestedPlaces(
+      description: json['description'],
+    );
   }
 }
