@@ -2,11 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_first_flutter_1/models/user.dart';
 import 'package:my_first_flutter_1/models/user_settings.dart';
 import 'package:my_first_flutter_1/services/database.dart';
+import 'package:my_first_flutter_1/services/log.service.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   UserModel _userFromFirebaseUser(User user) {
+    logger.i(">>>>>>> AuthService._userFromFirebaseUser");
+
     UserModel typedUser = user != null ? UserModel(uid: user.uid) : null;
     return typedUser;
   }
@@ -19,6 +22,7 @@ class AuthService {
   }
 
   Future signInAnon() async {
+    logger.i(">>>>>>> AuthService.signInAnon");
     try {
       var result = await _auth.signInAnonymously();
       User user = result.user;
