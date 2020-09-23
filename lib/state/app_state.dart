@@ -12,27 +12,23 @@ import 'package:my_first_flutter_1/services/log.service.dart';
 class AppState with ChangeNotifier {
   static LatLng _initialPosition;
   LatLng _lastPosition = _initialPosition;
-
   LatLng get initialPosition => _initialPosition;
-
   LatLng get lastPosition => _lastPosition;
 
   bool locationServiceActive = true;
   GoogleMapsServices _googleMapsServices = GoogleMapsServices();
-
   GoogleMapsServices get googleMapsServices => _googleMapsServices;
+
   TextEditingController locationController = TextEditingController();
   TextEditingController destinationController = TextEditingController();
 
   final Set<Marker> _markers = {};
-
   Set<Marker> get markers => _markers;
-  final Set<Polyline> _polyLines = {};
 
+  final Set<Polyline> _polyLines = {};
   Set<Polyline> get polyLines => _polyLines;
 
   GoogleMapController _mapController;
-
   GoogleMapController get mapController => _mapController;
 
   //for autocomplete
@@ -52,8 +48,6 @@ class AppState with ChangeNotifier {
     // _autoComplete += "blah " ;
 
     _autoComplete = await getCountries();
-
-    // debugPrint(_autoComplete.toString());
 
     notifyListeners();
   }
