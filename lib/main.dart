@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:my_first_flutter_1/models/user.dart';
 import 'package:my_first_flutter_1/screens/wrapper.dart';
 import 'package:my_first_flutter_1/services/auth.dart';
-import 'package:my_first_flutter_1/services/log.service.dart';
 import 'package:my_first_flutter_1/state/app_state.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-  logger.i(">>>>>>> 1.main");
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   return runApp(MultiProvider(
@@ -30,22 +28,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    logger.i(">>>>>>> 2.MyApp");
-
     return MaterialApp(home: Wrapper());
-    // return MaterialApp(home: Wrapper());
   }
 }
-//
-// class MyApp extends StatelessWidget {
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return StreamProvider<UserModel>.value(
-//         value: AuthService().user,
-//         child: MaterialApp(
-//           home: Wrapper(),
-//         ));
-//     // return MaterialApp(home: Wrapper());
-//   }
-// }
